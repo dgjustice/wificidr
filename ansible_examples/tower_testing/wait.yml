@@ -1,0 +1,7 @@
+---
+- name: "Simulate long-running job"
+  hosts: all
+  tasks:
+    - name: Wait for Christmas
+      pause:
+        minutes: 5
