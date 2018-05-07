@@ -1,0 +1,14 @@
+include
+bin
+.vscode
+lib
+lib64
+pip-*
+*.pyc
+.*.swo
+.*.swp
+pip-selfcheck.json
+*.pyc
+__pycache__
+.ipynb_checkpoints
+.cache
