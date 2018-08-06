@@ -1,8 +1,11 @@
 """Playing with heaps."""
 
+
 class Heap:
     """A heap class."""
+
     def __init__(self):
+        """Initialize the heap."""
         self.heap = []
         self.items = set()
 
@@ -20,7 +23,7 @@ class Heap:
 
     @staticmethod
     def less(val, other):
-        """Return is val < other?"""
+        """Return is val < other."""
         if val is None or other is None:
             return True
         return val < other
@@ -50,8 +53,10 @@ class Heap:
         rchild = self.heap[rdx] if heap_len > rdx else None
         return lchild, rchild
 
+
 class MaxHeap(Heap):
     """Maximum ordered heap."""
+
     def insert(self, val):
         """Insert a value into the heap."""
         if val not in self.items:
@@ -91,13 +96,17 @@ class MaxHeap(Heap):
         self.items.remove(rv)
         return rv
 
-class MinHeap(MaxHeap):
-    """Minimum ordered heap.
 
-    Note that we have to swap the logic of a couple methods to change order."""
+class MinHeap(MaxHeap):
+    """
+    Minimum ordered heap.
+
+    Note that we have to swap the logic of a couple methods to change order.
+    """
+
     @staticmethod
     def less(val, other):
-        """Return is val < other?"""
+        """Return is val < other."""
         if val is None or other is None:
             return True
         return val > other
