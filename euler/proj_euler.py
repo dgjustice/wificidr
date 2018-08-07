@@ -33,3 +33,8 @@ for i in range(3, int(math.floor(float(num)/2)), 2):
     if num % i == 0:
         print(i)
 
+"""
+Problem 16
+sum of the digits of 2^1000
+"""
+foo = sum([int(i) for i in str(2**1000)])
