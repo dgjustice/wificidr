@@ -1,6 +1,7 @@
 """Sieve of Eratosthenes"""
 from functools import reduce
 from collections import deque, Counter
+from math import sqrt, floor, ceil
 
 
 def sieve(ceil=1000):
@@ -49,6 +50,28 @@ def get_prime_factors(num):
         factors.append(num)
     return Counter(factors)
 
+def memoize(func):
+    """Function memoizer."""
+    mem = {}
+    def wrapper(num):
+        if num not in mem:
+            mem[num] = func(num)
+        return mem[num]
+    return wrapper
+
+@memoize
+def get_divisors(num):
+    """Return set of integral divisors of num."""
+    if num < 1:
+        raise ValueError("num must be > 0")
+    divs = {1}
+    for i in range(2, floor(sqrt(num)) + 1):
+        if not (num % i):
+            divs.add(i)
+            divs.add(num // i)
+    return divs
+    
+
 def main():
     # # Project Euler #7
     # foo = sieve(1000000)
@@ -60,16 +83,30 @@ def main():
     # prime_sum = sum([p for p in sieve(int(2e6))])
     # print(prime_sum)
 
-    # Project Euler #12
-    num_divs = 0
-    target = 500
-    triangle = lambda n: n * (n + 1) >> 1
-    while num_divs < 500:
-        num = triangle(target)
-        divs = get_prime_factors(num)
-        num_divs = reduce(lambda x, y: x * y, [i[1] + 1 for i in divs.items()])
-        print(f"num: {num}, target: {target}, num_divs: {num_divs}")
-        target += 1
+    # # Project Euler #12
+    # num_divs = 0
+    # target = 500
+    # triangle = lambda n: n * (n + 1) >> 1
+    # while num_divs < 500:
+    #     num = triangle(target)
+    #     divs = get_prime_factors(num)
+    #     num_divs = reduce(lambda x, y: x * y, [i[1] + 1 for i in divs.items()])
+    #     print(f"num: {num}, target: {target}, num_divs: {num_divs}")
+    #     target += 1
+    pass
+
+# Euler #23
+ceiling = 28123
+abund = set()
+out = 0
+for i in range(1, ceiling):
+    divs = get_divisors(i)
+    sig = sum(divs)
+    if sig > i:
+        abund.add(i)
+    if not any([(i - a) in abund for a in abund]):
+        out += i
+print(out)
 
 if __name__ == "__main__":
     main()
