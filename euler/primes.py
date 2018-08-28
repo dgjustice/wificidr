@@ -1,6 +1,6 @@
 """Sieve of Eratosthenes"""
 from functools import reduce
-from collections import deque, Counter
+from collections import deque, Counter, defaultdict
 from math import sqrt, floor, ceil
 
 
@@ -71,6 +71,16 @@ def get_divisors(num):
             divs.add(num // i)
     return divs
     
+def amicable(max_num):
+    """Find amicable numbers <= max_num"""
+    am = set()
+    for num in range(1, max_num + 1):
+        divs = sum(get_divisors(num))
+        if divs > 1:
+            a_divs = sum(get_divisors(divs))
+            if num == a_divs and a_divs != divs:
+                am.update({num, a_divs})
+    print(sum(am))
 
 def main():
     # # Project Euler #7
@@ -93,20 +103,20 @@ def main():
     #     num_divs = reduce(lambda x, y: x * y, [i[1] + 1 for i in divs.items()])
     #     print(f"num: {num}, target: {target}, num_divs: {num_divs}")
     #     target += 1
-    pass
 
-# Euler #23
-ceiling = 28123
-abund = set()
-out = 0
-for i in range(1, ceiling):
-    divs = get_divisors(i)
-    sig = sum(divs)
-    if sig > i:
-        abund.add(i)
-    if not any([(i - a) in abund for a in abund]):
-        out += i
-print(out)
+    # # Euler #23
+    # ceiling = 28123
+    # abund = set()
+    # out = 0
+    # for i in range(1, ceiling):
+    #     divs = get_divisors(i)
+    #     sig = sum(divs)
+    #     if sig > i:
+    #         abund.add(i)
+    #     if not any([(i - a) in abund for a in abund]):
+    #         out += i
+    # print(out)
+    amicable(10000)
 
 if __name__ == "__main__":
     main()
