@@ -4,16 +4,16 @@ from collections import deque, Counter, defaultdict
 from math import sqrt, floor, ceil
 
 
-def sieve(ceil=1000):
+def sieve(ceiling=1000):
     """Prime number generator."""
     mods = deque([2, 3, 5, 7])
-    arr = [True for i in range(ceil)]
+    arr = [True for i in range(ceiling)]
     # Zero and One are not prime
     arr[0] = False
     arr[1] = False
     while mods:
         mod = mods.popleft()
-        for n in range(0, ceil, mod):
+        for n in range(0, ceiling, mod):
             if n <= mod:
                 continue
             if not n % mod:
@@ -116,7 +116,8 @@ def main():
     #     if not any([(i - a) in abund for a in abund]):
     #         out += i
     # print(out)
-    amicable(10000)
+    # amicable(10000)
+    pass
 
 if __name__ == "__main__":
     main()
