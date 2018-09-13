@@ -2,13 +2,12 @@
 from __future__ import print_function
 
 def expand(t):
-    out = []
     if isinstance(t, tuple):
         for i in t:
-            out.extend(expand(i))
-        return out
+            for j in expand(i):
+                yield j
     else:
-        return t
+        yield t
 
 def perm(l):
     if len(l) == 1:
