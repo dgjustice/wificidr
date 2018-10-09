@@ -3,6 +3,9 @@ import socket
 from time import time
 import struct
 import logging
+import shlex
+import subprocess
+import re
 
 async def icmp_recv(expected=3):
     # Get a reference to the current event loop because
@@ -84,4 +87,23 @@ async def main():
     except asyncio.TimeoutError:
         print('timeout!')
 
-asyncio.run(main())
+def get_mtu():
+    """OSX, and let's dangerously assume everything.
+    
+    Routing tables
+
+    Internet:
+    Destination        Gateway            Flags        Refs      Use    Mtu   Netif Expire
+    default            192.168.1.1        UGSc           58        0   1500     en0
+    127                127.0.0.1          UCS             0        0  16384     lo0"""
+    cmd = "netstat -nlrf inet"
+    args = shlex.split(cmd)
+    with subprocess.Popen(args, stdout=subprocess.PIPE) as p:
+        data = p.stdout.read()
+    match = re.findall(r"^default.*", (data.decode("utf-8")), re.MULTILINE)
+    mtu = match[0].split()[5]
+    return mtu
+
+if __name__ == "__main__":
+    get_mtu()
+    # asyncio.run(main())
