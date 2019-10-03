@@ -24,12 +24,15 @@ def allocate_node(root, prefixlen):
     if root.subnet.prefixlen == prefixlen:
         if root.attr == "allocated":
             return None
-        else:
+        elif root.attr == "free":
             root.attr = "allocated"
             return root
-    if not root.left and not root.right:
+    if root.subnet.prefixlen >= prefixlen:
+        return None
+    if root.attr == "free":
         insert_node(root)
-    return allocate_node(root.left, prefixlen) or allocate_node(root.right, prefixlen)
+    if root.left and root.right:
+        return allocate_node(root.left, prefixlen) or allocate_node(root.right, prefixlen)
 
 def xor_nets(parent, child):
     return (int(parent.network_address) >> (32 - parent.prefixlen)) ^ \
@@ -55,7 +58,7 @@ load_data()
 # print(f"allocated: {allocate_node(root, 32).subnet}")
 for row in data:
     add_node(root, row)
-# print(add_node(root, ip_network("147.75.38.128/31")).subnet)
+# print(add_node(root, ip_network("147.75.38.128/31")).subnet)<Paste>
 
 # Build pretty pictures and export to cytoscape
 import networkx as nx
