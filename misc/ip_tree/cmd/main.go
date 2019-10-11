@@ -11,6 +11,6 @@ import (
 
 func main() {
     fmt.Println("hello world")
-	_ := bintree.NewNode("10.0.0.0/8")
+	_ = bintree.NewNode(1, "", nil, nil)
 }
 
