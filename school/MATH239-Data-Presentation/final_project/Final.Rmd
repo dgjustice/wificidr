@@ -1,0 +1,162 @@
+---
+title: "Final Project"
+author: "Daniel Justice"
+date: "3/20/2020"
+output:
+  html_document:
+    mathjax: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Solar system small body analysis
+
+The data presented here is a sample collected from NASA's JPL Small-Body Database.
+They represent smaller objects in the Solar System such as comets, asteriods, and moons.
+I chose this data set because I am curious about space science, and this is an opportunity to learn more about the subject while fulfilling the requirements of the assignment.
+Please forgive any inaccurate statements about orbital mechanics!
+There are **22,458 cases** in my sample.
+
+### Variables
+
+|Title|Description|Type|
+|---|---|---|
+|full_name|Full Name|string|
+|a| [au] semi-major axis|float64|
+|e| eccentricity|float64|
+|i| [deg] inclination|float64|
+|w| [deg] perihelion degree|float64|
+|om| [deg] node degree (longitude of the ascending node)|float64|
+|ma| [deg] M mean anomaly degree|float64|
+|q| [au] perihelion distance|float64|
+|ad| [au] Q aphelion distance|float64|
+|per_y| period years|float64|
+|H| absolute magnitude|float64|
+|moid| [au] Earth MOID (minimum orbit intersection distance)|float64|
+|orbit_id|Orbit solution ID|string|
+|class|Orbit class|string|
+
+All of the `float64` data types are **quantitative** variables, and the `string` data types `orbit_id` and `class` are **categorical**.
+
+### Oribit Classes
+
+Below is a table of orbit classes.  There is a wealth of information on the [CNEOS website](https://cneos.jpl.nasa.gov/) that provides much more detail than I can here.
+
+|class|name|num|
+|---|:---|---|
+|AMO|Amor|8267|
+|APO|Apollo|12308|
+|ATE|Aten|1684|
+|ETc|Encke-type Comet|1|
+|HTC|Halley-type Comet|30|
+|IEO|Atira|21|
+|JFC|Jupiter-family Comet*|10|
+|JFc|Jupiter-family Comet|137|
+
+JFC -> Jupiter-family comet, classical definition (P < 20 y).  
+JFc -> Jupiter-family comet, as defined by Levison and Duncan (2 < TJupiter < 3).
+
+```{r, echo=FALSE, results=FALSE}
+mydata = read.csv("../neo.csv")
+summary(mydata)
+```
+    
+## Eccentricity
+
+The first quantitative variable I would like to explore is labeled `e` for eccecentricity.
+This variable takes on values between 0 and 1 where 0 is a perfectly circular orbit and close to 1 flattens the orbit into line.
+The distribution appears to be close to **normal** and slighly **skewed to the right**.
+
+```{r, echo=FALSE}
+e_mean = round(mean(mydata$e), digits = 3)
+e_median = round(median(mydata$e), digits = 3)
+```
+
+The **mean** is `r e_mean`.  
+The **median** is `r e_median`.
+
+```{r, echo=FALSE}
+hist(mydata$e, main="Histogram of Eccentricity", xlab = "eccentricity")
+```
+
+```{r, echo=FALSE, results=FALSE}
+summary(mydata$e)
+```
+
+```{r, echo=FALSE}
+# Outliers Q3 + 1.5 * IQR > value < Q1 - 1.5 * IQR
+q1 = quantile(mydata$e, 0.25)
+q3 = quantile(mydata$e, 0.75)
+iqr = q3 - q1
+low_outliers <- mydata[which(mydata$e < q1 - (1.5 * iqr)),]
+high_outliers <- mydata[which(mydata$e > q3 + (1.5 * iqr)),]
+```
+
+
+The **IQR** is `r round(iqr, digits=3)`.  
+The **standard deviation** $s$ is `r round(sd(mydata$a), digits=3)`.  
+
+There are `r length(low_outliers$e)` **outlier** values les than `r round(q1 - (1.5 * iqr), digits=3)`  
+There are `r length(high_outliers$e)` **outlier** values greater than `r round(q3 + (1.5 * iqr), digits=3)`  
+
+
+```{r, echo=FALSE}
+boxplot(mydata$e, main="Eccentricity Boxplot")
+```
+
+## Semi-major axis
+
+The other quantitative variable I would like to explore is the semi-major axis.
+This is the larger of the two axis of an ellipse (for `e` > 0).
+This distribution has a log-normal shape and is **skewed to the right** with a much longer tail than the previous graph.
+
+The **mean** is `r e_mean`.  
+The **median** is `r e_median`.
+
+Please note the *logarithmic scale* of the y-axis in the following graph.
+```{r, echo=FALSE}
+hist(log(mydata$a), main="Histogram of Semi-Major Axis", xlab = "semi-major axis (AU)")
+```
+
+```{r, echo=FALSE, results=FALSE}
+summary(mydata$a)
+```
+
+```{r, echo=FALSE}
+# Outliers Q3 + 1.5 * IQR > value < Q1 - 1.5 * IQR
+q1 = quantile(mydata$a, 0.25)
+q3 = quantile(mydata$a, 0.75)
+iqr = q3 - q1
+low_outliers <- mydata[which(mydata$a < q1 - (1.5 * iqr)),]
+high_outliers <- mydata[which(mydata$a > q3 + (1.5 * iqr)),]
+```
+
+The **IQR** is `r round(iqr, digits=3)`.  
+The **standard deviation** $s$ is `r round(sd(mydata$a), digits=3)`.  
+
+There are `r length(low_outliers$e)` **outlier** values les than `r round(q1 - (1.5 * iqr), digits=3)`  
+There are `r length(high_outliers$e)` **outlier** values greater than `r round(q3 + (1.5 * iqr), digits=3)`  
+
+```{r, echo=FALSE}
+boxplot(mydata$a, main="Eccentricity Boxplot", log="y", xlab="semi-major axis (AU)")
+```
+```{r, echo=FALSE}
+library(hexbin)
+# plot(mydata$e, mydata$a, log="y", ylab="semi-major axis", xlab="eccentricity")
+
+hbin <- hexbin(mydata$e, mydata$a, xbins=50)
+plot(hbin, main="Semi-major axis vs Eccentricity", ylab="semi-major axis (AU)\n", xlab="eccentricity")
+```
+
+
+## Resources
+
+- https://ssd.jpl.nasa.gov/sbdb_query.cgi 
+- https://earthobservatory.nasa.gov/features/OrbitsCatalog
+- https://www.airuniversity.af.edu/Portals/10/AUPress/Books/AU-18.PDF
+- https://cneos.jpl.nasa.gov/about/neo_groups.html
+- https://cneos.jpl.nasa.gov/glossary/
+- https://www.statmethods.net/graphs/scatterplot.html

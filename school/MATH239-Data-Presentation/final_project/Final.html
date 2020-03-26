@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Daniel Justice" />
+
+
+<title>Final Project</title>
+
+<script src="Final_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="Final_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="Final_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="Final_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="Final_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="Final_files/navigation-1.1/tabsets.js"></script>
+<link href="Final_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="Final_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Final Project</h1>
+<h4 class="author">Daniel Justice</h4>
+<h4 class="date">3/20/2020</h4>
+
+</div>
+
+
+<div id="solar-system-small-body-analysis" class="section level1">
+<h1>Solar system small body analysis</h1>
+<p>The data presented here is a sample collected from NASA’s JPL Small-Body Database. They represent smaller objects in the Solar System such as comets, asteriods, and moons. I chose this data set because I am curious about space science, and this is an opportunity to learn more about the subject while fulfilling the requirements of the assignment. Please forgive any inaccurate statements about orbital mechanics! There are <strong>22,458 cases</strong> in my sample.</p>
+<div id="variables" class="section level3">
+<h3>Variables</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Title</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>full_name</td>
+<td>Full Name</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td>a</td>
+<td>[au] semi-major axis</td>
+<td>float64</td>
+</tr>
+<tr class="odd">
+<td>e</td>
+<td>eccentricity</td>
+<td>float64</td>
+</tr>
+<tr class="even">
+<td>i</td>
+<td>[deg] inclination</td>
+<td>float64</td>
+</tr>
+<tr class="odd">
+<td>w</td>
+<td>[deg] perihelion degree</td>
+<td>float64</td>
+</tr>
+<tr class="even">
+<td>om</td>
+<td>[deg] node degree (longitude of the ascending node)</td>
+<td>float64</td>
+</tr>
+<tr class="odd">
+<td>ma</td>
+<td>[deg] M mean anomaly degree</td>
+<td>float64</td>
+</tr>
+<tr class="even">
+<td>q</td>
+<td>[au] perihelion distance</td>
+<td>float64</td>
+</tr>
+<tr class="odd">
+<td>ad</td>
+<td>[au] Q aphelion distance</td>
+<td>float64</td>
+</tr>
+<tr class="even">
+<td>per_y</td>
+<td>period years</td>
+<td>float64</td>
+</tr>
+<tr class="odd">
+<td>H</td>
+<td>absolute magnitude</td>
+<td>float64</td>
+</tr>
+<tr class="even">
+<td>moid</td>
+<td>[au] Earth MOID (minimum orbit intersection distance)</td>
+<td>float64</td>
+</tr>
+<tr class="odd">
+<td>orbit_id</td>
+<td>Orbit solution ID</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td>class</td>
+<td>Orbit class</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<p>All of the <code>float64</code> data types are <strong>quantitative</strong> variables, and the <code>string</code> data types <code>orbit_id</code> and <code>class</code> are <strong>categorical</strong>.</p>
+</div>
+<div id="oribit-classes" class="section level3">
+<h3>Oribit Classes</h3>
+<p>Below is a table of orbit classes. There is a wealth of information on the <a href="https://cneos.jpl.nasa.gov/">CNEOS website</a> that provides much more detail than I can here.</p>
+<table>
+<thead>
+<tr class="header">
+<th>class</th>
+<th align="left">name</th>
+<th>num</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AMO</td>
+<td align="left">Amor</td>
+<td>8267</td>
+</tr>
+<tr class="even">
+<td>APO</td>
+<td align="left">Apollo</td>
+<td>12308</td>
+</tr>
+<tr class="odd">
+<td>ATE</td>
+<td align="left">Aten</td>
+<td>1684</td>
+</tr>
+<tr class="even">
+<td>ETc</td>
+<td align="left">Encke-type Comet</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>HTC</td>
+<td align="left">Halley-type Comet</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>IEO</td>
+<td align="left">Atira</td>
+<td>21</td>
+</tr>
+<tr class="odd">
+<td>JFC</td>
+<td align="left">Jupiter-family Comet*</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>JFc</td>
+<td align="left">Jupiter-family Comet</td>
+<td>137</td>
+</tr>
+</tbody>
+</table>
+<p>JFC -&gt; Jupiter-family comet, classical definition (P &lt; 20 y).<br />
+JFc -&gt; Jupiter-family comet, as defined by Levison and Duncan (2 &lt; TJupiter &lt; 3).</p>
+</div>
+<div id="eccentricity" class="section level2">
+<h2>Eccentricity</h2>
+<p>The first quantitative variable I would like to explore is labeled <code>e</code> for eccecentricity. This variable takes on values between 0 and 1 where 0 is a perfectly circular orbit and close to 1 flattens the orbit into line. The distribution appears to be close to <strong>normal</strong> and slighly <strong>skewed to the right</strong>.</p>
+<p>The <strong>mean</strong> is 0.447.<br />
+The <strong>median</strong> is 0.46.</p>
+<p><img src="Final_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>The <strong>IQR</strong> is 0.257</p>
+<p>There are 0 <strong>outlier</strong> values les than -0.069<br />
+There are 35 <strong>outlier</strong> values greater than 0.957</p>
+<p><img src="Final_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="semi-major-axis" class="section level2">
+<h2>Semi-major axis</h2>
+<p>The other quantitative variable I would like to explore is the semi-major axis. This is the larger of the two axis of an ellipse (for <code>e</code> &gt; 0). This distribution has a log-normal shape and is <strong>skewed to the right</strong> with a much longer tail than the previous graph.</p>
+<p>The <strong>mean</strong> is 0.447.<br />
+The <strong>median</strong> is 0.46.</p>
+<p>Please note the <em>logarithmic scale</em> of the y-axis in the following graph. <img src="Final_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The <strong>IQR</strong> is 0.892<br />
+The <strong>standard deviation</strong> <span class="math inline">\(s\)</span> is 3.943</p>
+<p>There are 0 <strong>outlier</strong> values les than -0.022<br />
+There are 98 <strong>outlier</strong> values greater than 3.546</p>
+<p><img src="Final_files/figure-html/unnamed-chunk-10-1.png" width="672" /> <img src="Final_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<ul>
+<li><a href="https://ssd.jpl.nasa.gov/sbdb_query.cgi" class="uri">https://ssd.jpl.nasa.gov/sbdb_query.cgi</a></li>
+<li><a href="https://earthobservatory.nasa.gov/features/OrbitsCatalog" class="uri">https://earthobservatory.nasa.gov/features/OrbitsCatalog</a></li>
+<li><a href="https://www.airuniversity.af.edu/Portals/10/AUPress/Books/AU-18.PDF" class="uri">https://www.airuniversity.af.edu/Portals/10/AUPress/Books/AU-18.PDF</a></li>
+<li><a href="https://cneos.jpl.nasa.gov/about/neo_groups.html" class="uri">https://cneos.jpl.nasa.gov/about/neo_groups.html</a></li>
+<li><a href="https://cneos.jpl.nasa.gov/glossary/" class="uri">https://cneos.jpl.nasa.gov/glossary/</a></li>
+<li><a href="https://www.statmethods.net/graphs/scatterplot.html" class="uri">https://www.statmethods.net/graphs/scatterplot.html</a></li>
+</ul>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
