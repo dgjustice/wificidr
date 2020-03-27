@@ -3,9 +3,11 @@ title: "Final Project"
 author: "Daniel Justice"
 date: "3/20/2020"
 output:
+  pdf_document: default
+  word_document: default
   html_document:
-    mathjax: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-    self_contained: false
+    mathjax: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+    self_contained: no
 ---
 
 ```{r setup, include=FALSE}
@@ -15,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Solar system small body analysis
 
 The data presented here is a sample collected from NASA's JPL Small-Body Database.
-They represent smaller objects in the Solar System such as comets, asteriods, and moons.
+They represent smaller objects in the Solar System such as comets, asteroids, and moons.
 I chose this data set because I am curious about space science, and this is an opportunity to learn more about the subject while fulfilling the requirements of the assignment.
 Please forgive any inaccurate statements about orbital mechanics!
 There are **22,458 cases** in my sample.
@@ -41,7 +43,7 @@ There are **22,458 cases** in my sample.
 
 All of the `float64` data types are **quantitative** variables, and the `string` data types `orbit_id` and `class` are **categorical**.
 
-### Oribit Classes
+### Orbit Classes
 
 Below is a table of orbit classes.  There is a wealth of information on the [CNEOS website](https://cneos.jpl.nasa.gov/) that provides much more detail than I can here.
 
@@ -66,9 +68,9 @@ summary(mydata)
     
 ## Eccentricity
 
-The first quantitative variable I would like to explore is labeled `e` for eccecentricity.
+The first quantitative variable I would like to explore is labeled `e` for eccentricity.
 This variable takes on values between 0 and 1 where 0 is a perfectly circular orbit and close to 1 flattens the orbit into line.
-The distribution appears to be close to **normal** and slighly **skewed to the right**.
+The distribution appears to be close to **normal** and slightly **skewed to the right**.
 
 ```{r, echo=FALSE}
 e_mean = round(mean(mydata$e), digits = 3)
@@ -99,7 +101,7 @@ high_outliers <- mydata[which(mydata$e > q3 + (1.5 * iqr)),]
 The **IQR** is `r round(iqr, digits=3)`.  
 The **standard deviation** $s$ is `r round(sd(mydata$a), digits=3)`.  
 
-There are `r length(low_outliers$e)` **outlier** values les than `r round(q1 - (1.5 * iqr), digits=3)`  
+There are `r length(low_outliers$e)` **outlier** values less than `r round(q1 - (1.5 * iqr), digits=3)`  
 There are `r length(high_outliers$e)` **outlier** values greater than `r round(q3 + (1.5 * iqr), digits=3)`  
 
 
@@ -107,18 +109,45 @@ There are `r length(high_outliers$e)` **outlier** values greater than `r round(q
 boxplot(mydata$e, main="Eccentricity Boxplot")
 ```
 
+### Five-number summary
+
+|Variable|Value|
+|---|:---|
+|minimum|`r round(min(mydata$e), digits=3)`|
+|$Q_1$|`r round(quantile(mydata$e, 0.25), digits=3)`|
+|median|`r round(median(mydata$e), digits=3)`|
+|$Q_3$|`r round(quantile(mydata$e, 0.75), digits=3)`|
+|maximum|`r round(max(mydata$e), digits=3)`|
+
+### Eccentricity by orbit class
+
+Near-Earth objects (NEO) have orbits that put them in proximity to Earth's orbit.
+It is not much surprise to see similar IQR's in these classes (AMO, APO, ATE, and IEO).
+The Atiras class (IEO) is noteworthy for its lack of extreme values.
+NEO's in this class have orbits contained entirely within Earth's own orbit.
+
+```{r, echo=FALSE}
+boxplot(mydata$e~mydata$class, main="Eccentricity", xlab="Orbit class", ylab="e")
+```
+
+
 ## Semi-major axis
 
 The other quantitative variable I would like to explore is the semi-major axis.
 This is the larger of the two axis of an ellipse (for `e` > 0).
 This distribution has a log-normal shape and is **skewed to the right** with a much longer tail than the previous graph.
+Given the spread of this data, please note the *logarithmic scale* where indicated.
 
-The **mean** is `r e_mean`.  
-The **median** is `r e_median`.
-
-Please note the *logarithmic scale* of the y-axis in the following graph.
 ```{r, echo=FALSE}
-hist(log(mydata$a), main="Histogram of Semi-Major Axis", xlab = "semi-major axis (AU)")
+a_mean = round(mean(mydata$a), digits = 3)
+a_median = round(median(mydata$a), digits = 3)
+```
+
+The **mean** is `r a_mean`.  
+The **median** is `r a_median`.
+
+```{r, echo=FALSE}
+hist(log(mydata$a), main="Histogram of Semi-Major Axis", xlab = "semi-major axis (AU)", ylab="Frequency (log scale)")
 ```
 
 ```{r, echo=FALSE, results=FALSE}
@@ -137,12 +166,39 @@ high_outliers <- mydata[which(mydata$a > q3 + (1.5 * iqr)),]
 The **IQR** is `r round(iqr, digits=3)`.  
 The **standard deviation** $s$ is `r round(sd(mydata$a), digits=3)`.  
 
-There are `r length(low_outliers$e)` **outlier** values les than `r round(q1 - (1.5 * iqr), digits=3)`  
+There are `r length(low_outliers$e)` **outlier** values less than `r round(q1 - (1.5 * iqr), digits=3)`  
 There are `r length(high_outliers$e)` **outlier** values greater than `r round(q3 + (1.5 * iqr), digits=3)`  
 
 ```{r, echo=FALSE}
-boxplot(mydata$a, main="Eccentricity Boxplot", log="y", xlab="semi-major axis (AU)")
+boxplot(mydata$a, main="Semi-major axis Boxplot", log="y", xlab="semi-major axis (AU)", ylab="AU  (log scale)")
 ```
+
+### Five-number summary
+
+|Variable|Value|
+|---|:---|
+|minimum|`r round(min(mydata$a), digits=3)`|
+|$Q_1$|`r round(quantile(mydata$a, 0.25), digits=3)`|
+|median|`r round(median(mydata$a), digits=3)`|
+|$Q_3$|`r round(quantile(mydata$a, 0.75), digits=3)`|
+|maximum|`r round(max(mydata$a), digits=3)`|
+
+### Semi-major axis by orbit class
+
+Aten (ATE) and Atira (IEO) class bodies have semi-major axes smaller than 1 AU by definition.
+I am surprised that there are no outliers in the Jupiter and Haley-family classes.
+This may be due to observational practices or other constraints that I am not familiar with.
+
+For reference, Earth is 1 AU from the sun, and Pluto is around 40 AU from the sun.
+Some of these bodies travel very far outside of our planetary system!
+
+
+```{r, echo=FALSE}
+boxplot(mydata$a~mydata$class, main="Semi-major axis by orbit class", xlab="Orbit class", ylab="semi-major axis (AU)", log="y")
+```
+
+## Linear correlation
+
 ```{r, echo=FALSE}
 library(hexbin)
 # plot(mydata$e, mydata$a, log="y", ylab="semi-major axis", xlab="eccentricity")
@@ -151,12 +207,26 @@ hbin <- hexbin(mydata$e, mydata$a, xbins=50)
 plot(hbin, main="Semi-major axis vs Eccentricity", ylab="semi-major axis (AU)\n", xlab="eccentricity")
 ```
 
+```{r echo=FALSE}
+model = lm(mydata$a ~ mydata$e, data=mydata)
+int =  model$coefficient["(Intercept)"]
+slope =model$coefficient["mydata$e"]
+plot(mydata$a ~ mydata$e, xlab="Eccentricity", ylab="Semi-major axis (log scale)", log="y", main="Semi-major axis vs Eccentricity")
 
-## Resources
+abline(int, slope, lty=1, lwd=2, col="blue", untf=TRUE) 
 
-- https://ssd.jpl.nasa.gov/sbdb_query.cgi 
-- https://earthobservatory.nasa.gov/features/OrbitsCatalog
-- https://www.airuniversity.af.edu/Portals/10/AUPress/Books/AU-18.PDF
-- https://cneos.jpl.nasa.gov/about/neo_groups.html
-- https://cneos.jpl.nasa.gov/glossary/
-- https://www.statmethods.net/graphs/scatterplot.html
+```
+
+The **correlation coefficient** $r$ is `r round(cor(mydata$a, mydata$e), digits=3)`.
+One possible **confounding, or lurking** variable is `i` or inclination.
+Inclination exhibits a similar correlation coefficient and clustering of values.
+The r-value is low, but it appears from the clustering in the above graph that one would have a decent probability of finding satellites near the regression line, especially for larger values of eccentricity.
+I am surprised that orbits with large semi-major axes tend to be highly elliptic as well.
+
+## Summary
+
+I do not have the physics background and experience to do this data justice.
+There are many more variables and relationships that could be explored much further.
+I am finishing this assignment with many more questions than answers about this data set, but it was an exciting opporunity to explore a new subject!
+NASA's JPL provides a wealth of data to the public for those who are interested.
+I highly recommend you take a look at these awesome resources!

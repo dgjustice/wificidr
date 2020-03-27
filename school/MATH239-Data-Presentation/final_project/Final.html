@@ -186,7 +186,7 @@ summary {
 
 <div id="solar-system-small-body-analysis" class="section level1">
 <h1>Solar system small body analysis</h1>
-<p>The data presented here is a sample collected from NASA’s JPL Small-Body Database. They represent smaller objects in the Solar System such as comets, asteriods, and moons. I chose this data set because I am curious about space science, and this is an opportunity to learn more about the subject while fulfilling the requirements of the assignment. Please forgive any inaccurate statements about orbital mechanics! There are <strong>22,458 cases</strong> in my sample.</p>
+<p>The data presented here is a sample collected from NASA’s JPL Small-Body Database. They represent smaller objects in the Solar System such as comets, asteroids, and moons. I chose this data set because I am curious about space science, and this is an opportunity to learn more about the subject while fulfilling the requirements of the assignment. Please forgive any inaccurate statements about orbital mechanics! There are <strong>22,458 cases</strong> in my sample.</p>
 <div id="variables" class="section level3">
 <h3>Variables</h3>
 <table>
@@ -272,8 +272,8 @@ summary {
 </table>
 <p>All of the <code>float64</code> data types are <strong>quantitative</strong> variables, and the <code>string</code> data types <code>orbit_id</code> and <code>class</code> are <strong>categorical</strong>.</p>
 </div>
-<div id="oribit-classes" class="section level3">
-<h3>Oribit Classes</h3>
+<div id="orbit-classes" class="section level3">
+<h3>Orbit Classes</h3>
 <p>Below is a table of orbit classes. There is a wealth of information on the <a href="https://cneos.jpl.nasa.gov/">CNEOS website</a> that provides much more detail than I can here.</p>
 <table>
 <thead>
@@ -331,37 +331,114 @@ JFc -&gt; Jupiter-family comet, as defined by Levison and Duncan (2 &lt; TJupite
 </div>
 <div id="eccentricity" class="section level2">
 <h2>Eccentricity</h2>
-<p>The first quantitative variable I would like to explore is labeled <code>e</code> for eccecentricity. This variable takes on values between 0 and 1 where 0 is a perfectly circular orbit and close to 1 flattens the orbit into line. The distribution appears to be close to <strong>normal</strong> and slighly <strong>skewed to the right</strong>.</p>
+<p>The first quantitative variable I would like to explore is labeled <code>e</code> for eccentricity. This variable takes on values between 0 and 1 where 0 is a perfectly circular orbit and close to 1 flattens the orbit into line. The distribution appears to be close to <strong>normal</strong> and slightly <strong>skewed to the right</strong>.</p>
 <p>The <strong>mean</strong> is 0.447.<br />
 The <strong>median</strong> is 0.46.</p>
 <p><img src="Final_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p>The <strong>IQR</strong> is 0.257</p>
-<p>There are 0 <strong>outlier</strong> values les than -0.069<br />
+<p>The <strong>IQR</strong> is 0.257.<br />
+The <strong>standard deviation</strong> <span class="math inline">\(s\)</span> is 3.943.</p>
+<p>There are 0 <strong>outlier</strong> values less than -0.069<br />
 There are 35 <strong>outlier</strong> values greater than 0.957</p>
 <p><img src="Final_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<div id="five-number-summary" class="section level3">
+<h3>Five-number summary</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th align="left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>minimum</td>
+<td align="left">0.003</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(Q_1\)</span></td>
+<td align="left">0.316</td>
+</tr>
+<tr class="odd">
+<td>median</td>
+<td align="left">0.46</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(Q_3\)</span></td>
+<td align="left">0.572</td>
+</tr>
+<tr class="odd">
+<td>maximum</td>
+<td align="left">0.998</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="eccentricity-by-orbit-class" class="section level3">
+<h3>Eccentricity by orbit class</h3>
+<p>Near-Earth objects (NEO) have orbits that put them in proximity to Earth’s orbit. It is not much surprise to see similar IQR’s in these classes (AMO, APO, ATE, and IEO). The Atiras class (IEO) is noteworthy for its lack of extreme values. NEO’s in this class have orbits contained entirely within Earth’s own orbit.</p>
+<p><img src="Final_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
 </div>
 <div id="semi-major-axis" class="section level2">
 <h2>Semi-major axis</h2>
-<p>The other quantitative variable I would like to explore is the semi-major axis. This is the larger of the two axis of an ellipse (for <code>e</code> &gt; 0). This distribution has a log-normal shape and is <strong>skewed to the right</strong> with a much longer tail than the previous graph.</p>
+<p>The other quantitative variable I would like to explore is the semi-major axis. This is the larger of the two axis of an ellipse (for <code>e</code> &gt; 0). This distribution has a log-normal shape and is <strong>skewed to the right</strong> with a much longer tail than the previous graph. Given the spread of this data, please note the <em>logarithmic scale</em> where indicated.</p>
 <p>The <strong>mean</strong> is 0.447.<br />
 The <strong>median</strong> is 0.46.</p>
-<p>Please note the <em>logarithmic scale</em> of the y-axis in the following graph. <img src="Final_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<p>The <strong>IQR</strong> is 0.892<br />
-The <strong>standard deviation</strong> <span class="math inline">\(s\)</span> is 3.943</p>
-<p>There are 0 <strong>outlier</strong> values les than -0.022<br />
+<p><img src="Final_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The <strong>IQR</strong> is 0.892.<br />
+The <strong>standard deviation</strong> <span class="math inline">\(s\)</span> is 3.943.</p>
+<p>There are 0 <strong>outlier</strong> values less than -0.022<br />
 There are 98 <strong>outlier</strong> values greater than 3.546</p>
-<p><img src="Final_files/figure-html/unnamed-chunk-10-1.png" width="672" /> <img src="Final_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="Final_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<div id="five-number-summary-1" class="section level3">
+<h3>Five-number summary</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th align="left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>minimum</td>
+<td align="left">0.555</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(Q_1\)</span></td>
+<td align="left">1.316</td>
+</tr>
+<tr class="odd">
+<td>median</td>
+<td align="left">1.723</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(Q_3\)</span></td>
+<td align="left">2.208</td>
+</tr>
+<tr class="odd">
+<td>maximum</td>
+<td align="left">453.022</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="resources" class="section level2">
-<h2>Resources</h2>
-<ul>
-<li><a href="https://ssd.jpl.nasa.gov/sbdb_query.cgi" class="uri">https://ssd.jpl.nasa.gov/sbdb_query.cgi</a></li>
-<li><a href="https://earthobservatory.nasa.gov/features/OrbitsCatalog" class="uri">https://earthobservatory.nasa.gov/features/OrbitsCatalog</a></li>
-<li><a href="https://www.airuniversity.af.edu/Portals/10/AUPress/Books/AU-18.PDF" class="uri">https://www.airuniversity.af.edu/Portals/10/AUPress/Books/AU-18.PDF</a></li>
-<li><a href="https://cneos.jpl.nasa.gov/about/neo_groups.html" class="uri">https://cneos.jpl.nasa.gov/about/neo_groups.html</a></li>
-<li><a href="https://cneos.jpl.nasa.gov/glossary/" class="uri">https://cneos.jpl.nasa.gov/glossary/</a></li>
-<li><a href="https://www.statmethods.net/graphs/scatterplot.html" class="uri">https://www.statmethods.net/graphs/scatterplot.html</a></li>
-</ul>
+<div id="semi-major-axis-by-orbit-class" class="section level3">
+<h3>Semi-major axis by orbit class</h3>
+<p>Aten (ATE) and Atira (IEO) class bodies have semi-major axes smaller than 1 AU by definition. I am surprised that there are no outliers in the Jupiter and Haley-family classes. This may be due to observational practices or other constraints that I am not familiar with.</p>
+<p>For reference, Earth is 1 AU from the sun, and Pluto is around 40 AU from the sun. Some of these bodies travel very far outside of our planetary system!</p>
+<p><img src="Final_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+</div>
+<div id="linear-correlation" class="section level2">
+<h2>Linear correlation</h2>
+<p><img src="Final_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="Final_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>The <strong>correlation coefficient</strong> <span class="math inline">\(r\)</span> is 0.145. One possible <strong>confounding, or lurking</strong> variable is <code>i</code> or inclination. Inclination exhibits a similar correlation coefficient and clustering of values. The r-value is low, but it appears from the clustering in the above graph that one would have a decent probability of finding satellites near the regression line, especially for larger values of eccentricity. I am surprised that orbits with large semi-major axes tend to be highly elliptic as well.</p>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>I do not have the physics background and experience to do this data justice. There are many more variables and relationships that could be explored much further. I am finishing this assignment with many more questions than answers about this data set, but it was an exciting opporunity to explore a new subject! NASA’s JPL provides a wealth of data to the public for those who are interested. I highly recommend you take a look at these awesome resources!</p>
 </div>
 </div>
 
