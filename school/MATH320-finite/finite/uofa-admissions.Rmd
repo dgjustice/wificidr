@@ -1,0 +1,44 @@
+---
+title: "University of Arkansas Admissions"
+author: "Daniel Justice"
+date: "8/8/2020"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Analysis of Male and Female applicants to the University of Arkansas
+
+My data set is sourced from yearly data available at <https://oir.uark.edu/cds/index.php>.  
+
+I am looking at first-time, first-year students.
+
+```{r cars, echo=FALSE}
+m_applied = c(2389,2224, 2111, 2202, 2431, 2651, 2785, 2964, 4071, 4765, 5660, 5696, 6503, 7550, 7616, 8464, 8180, 8600, 9201, 9036, 7811, 7305)
+f_applied = c(2487, 2228, 2169, 2268, 2594, 2840, 3034, 3077, 4372, 5367, 6385, 6339, 7516, 9083, 9133, 10444, 10804, 11942, 12338, 12679, 10921, 10608)
+m_admitted = c(2081, 1923, 1873, 1931, 2035, 2217, 2155, 2546, 2784, 2959, 3279, 3187, 3990, 4731, 4862, 4947, 5107, 5231, 5704, 5945, 5958, 5574)
+f_admitted = c(2228, 1984, 1985, 2063, 2287, 2444, 2412, 2737, 2986, 3303, 3666, 3564, 4478, 5398, 5768, 6129, 6670, 7106, 7909, 8379, 8554, 8235)
+m_pt_enrolled = c(1225, 1073, 1111, 1083, 1053, 1115, 1212, 1352, 1377, 1454, 1491, 1445, 1850, 2156, 2181, 2033, 2051, 2222, 2216, 2270, 2208, 2062)
+m_ft_enrolled = c(36, 25, 23, 54, 31, 23, 28, 30, 28, 9, 15, 13, 18, 21, 11, 18, 25, 13, 7, 13, 8, 18)
+f_pt_enrolled = c(1257, 1140, 1121, 1152, 1128, 1194, 1245, 1341, 1349, 1425, 1488, 1446, 1930, 2258, 2369, 2267, 2467, 2649, 2722, 2762, 2769, 2500)
+f_ft_enrolled = c(38, 30, 28, 43, 39, 25, 29, 29, 30, 11, 17, 15, 12, 12, 13, 21, 28, 31, 22, 20, 20, 21)
+
+year = seq(1998, 2019)
+data = data.frame(men_applied=m_applied, female_applied=f_applied, men_admitted=m_admitted, female_admitted=f_admitted, men_pt_enrolled=m_pt_enrolled, men_ft_enrolled=m_ft_enrolled, female_pt_enrolled=f_pt_enrolled, female_ft_enrolled=f_ft_enrolled, enroll_year=year)
+attach(data)
+head(data)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(female_applied, female_admitted)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
