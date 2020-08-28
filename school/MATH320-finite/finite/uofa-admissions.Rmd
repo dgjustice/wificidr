@@ -3,21 +3,24 @@ title: "University of Arkansas Admissions"
 author: "Daniel Justice"
 date: "8/8/2020"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
+header-includes: \usepackage{setspace}\doublespacing
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+\pagebreak
 
-## Analysis of Male and Female applicants to the University of Arkansas
+## Simple Linear Regression Analysis
 
-My data set is sourced from yearly data available at <https://oir.uark.edu/cds/index.php>.  
+Linear regression is a mathematical method to determine a line of "best fit" between two pairs of data collections (Rolf, 2013, p. 198).  It is often found in conjunction with a scatter plot.  One of the first steps when performing regression analysis is to determine if linear regression is appropriate for your data.  In other words, you must ask the question, "Is there a linear relationship between these data collections?"  Before we address this question, we need some data!
 
-I am looking at first-time, first-year students.
+My data set is sourced from yearly data available at <https://oir.uark.edu/cds/index.php>.  There are many different data to choose from, but let's narrow our the search to first-time, first-year students at the University of Arkansas.  The data is split between male and female gender, and subdivided into categories of applied, admitted, part-time enrolled, and full-time enrolled.  We are looking at the collection from 1998 to 2019.
 
-```{r cars, echo=FALSE}
+```{r data-input, echo=FALSE}
 m_applied = c(2389,2224, 2111, 2202, 2431, 2651, 2785, 2964, 4071, 4765, 5660, 5696, 6503, 7550, 7616, 8464, 8180, 8600, 9201, 9036, 7811, 7305)
 f_applied = c(2487, 2228, 2169, 2268, 2594, 2840, 3034, 3077, 4372, 5367, 6385, 6339, 7516, 9083, 9133, 10444, 10804, 11942, 12338, 12679, 10921, 10608)
 m_admitted = c(2081, 1923, 1873, 1931, 2035, 2217, 2155, 2546, 2784, 2959, 3279, 3187, 3990, 4731, 4862, 4947, 5107, 5231, 5704, 5945, 5958, 5574)
@@ -30,15 +33,70 @@ f_ft_enrolled = c(38, 30, 28, 43, 39, 25, 29, 29, 30, 11, 17, 15, 12, 12, 13, 21
 year = seq(1998, 2019)
 data = data.frame(men_applied=m_applied, female_applied=f_applied, men_admitted=m_admitted, female_admitted=f_admitted, men_pt_enrolled=m_pt_enrolled, men_ft_enrolled=m_ft_enrolled, female_pt_enrolled=f_pt_enrolled, female_ft_enrolled=f_ft_enrolled, enroll_year=year)
 attach(data)
-head(data)
 ```
 
-## Including Plots
+### Data fit
 
-You can also embed plots, for example:
+First, I wish to compare the number of female applicants to the number of male applicants each year.  The best visual tool for this is a scatter plot as seen in the following image.
 
-```{r pressure, echo=FALSE}
-plot(female_applied, female_admitted)
+```{r scatter-fem-app-men-app, echo=FALSE, results=FALSE}
+plot(female_applied, men_applied, xlab="Female Applied", ylab="Male Applied")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+There is clearly a linear relationship between these data points, and our intuition correctly tells us that we could make reasonable predictions with a line of best-fit.  However, we cannot blindly assume that this is the case for all of our data.  Let's look at the relationship between female applicants and female full-time enrollments.
+
+```{r female-scatter-app-enroll, echo=FALSE}
+plot(female_applied, female_ft_enrolled, ylab="Femail Full-time Enrolled", xlab="Female Applied")
+```
+
+### r-values
+
+You would be hard-pressed to determine a linear relationship with this data!  Although we didn't study it in the course materials, it is important to evaluate the correlation coefficient (or "r-value") between pairs of data.  What we see in the scatter plot can be determined numerically "by computing z score values for each value for both x and y, where z is obtained by subtracting the mean from each value and dividing by the distribution's standard deviation." (Maher, n.d.)  Values close to $|1|$ mean that there is a strong linear relationship.  The first plot of male to female applicants has an r-value of `r round(cor(female_applied, men_applied, method="pearson"), digits=3)`, and the latter plot has an r-value of `r round(cor(female_applied, female_ft_enrolled, method="pearson"), digits=3)`.  This means that the first data set is much more appropriate for linear regression analysis.
+
+### Linear regression
+
+As mentioned earlier, linear regression allows us to find a line of "best-fit" for the data in question.  The textbook doesn't go into great detail on the subject, nor do most introductory articles you find on the Internet.  The formula uses the square of the distance between a value and the best-fit line to eliminate variance caused by negative values.  We need to minimize the value of a squared, or quadratic function (Weisstein, 2020).
+
+$$R^2 (a,b) \equiv \sum_{i=1}^{n} [y_i - f(x_i, a+bx_i)]^2$$
+There are two unknowns that we are interested in.  The y-intercept $a$ and the slope $b$.  Since this is a quadratic, we know that a minimum or maximum will be where the first derivative is equal to zero (Weisstein, 2020).  This formula may appear a little daunting at first, but to invoke some old Professor Ghrist videos, we simply need to find the derivative of "blah" squared.  Keep in mind that since we are dealing with two unknowns, we have to find the derivative with respect to $a$ and *separately* with respect to $b$.  Many software packages, both free and commercial, do all of the heaving lifting for us, but some insight behind the curtain helps us appreciate the technique and determine when things go wrong!
+
+The following plot is the same as the first scatter plot of male versus female applicants to the University of Arkansas, but I have superimposed the regression line.
+
+```{r linear-mod, echo=FALSE}
+linearMod <- lm(men_applied~female_applied)
+plot(female_applied, men_applied, xlab="Female Applied", ylab="Male Applied")
+abline(linearMod)
+```
+
+One thing you must note is that there is _no year_ on this graph.  Yes, admissions have increased each year, but I have graphed the relationship between female and male applicants.  In other words, you can think of this relationship as being `Number of Male appicants = f(Number of Female Appicants)` where `f` is the linear function with coefficients of the regression line.  Speaking of which, the regression line has a y-intercept of `r round(linearMod$coefficients[1], digits=3)`, and a slope of `r round(linearMod$coefficients[2], digits=3)`.  We can use this information to make a prediction of how many male applicants to expect when there are 13,000 female applicants.
+
+$$\text{Male Applicants}=0.676(13000) + 899.807 \approx 9688$$
+
+For comparison, let's look at the number of men versus the application year.
+
+```{r linear-mod-male, echo=FALSE}
+linearModYear <- lm(men_applied~year)
+plot(year, men_applied, xlab="Year", ylab="Male Applied")
+abline(linearModYear)
+```
+
+This regression line has a y-intercept of `r round(linearModYear$coefficients[1], digits=3)`, and a slope of `r round(linearModYear$coefficients[2], digits=3)`.  The r-value is `r round(cor(men_applied, year, method="pearson"), digits=3)` which isn't quite as good as the previous graph.  I believe it is still sufficient for making predictions, so let's predict how many male applicants to expect this school year...
+
+$$\text{Male Applicants}=383.6 * 2020 - 765086 = 9786$$
+
+This appears like a reasonable estimate, except for the fact that I have no idea how the pandemic will affect the true outcome!
+
+### Conclusion
+
+Linear regression is a very useful tool to use historical data to make predictions about the future.  The r-value is an important component of this analysis.  If it was my job to predict future admissions at the University of Arkansas, the number of female applicants may very well be a superior indicator of male admissions than the yearly trend.  The takeaway here is that is important to evaluate as many data points as possible and look at the relationships between many different data points.  Confounding factors can lead to erroneous results.  Linear regression is a great start when performing data analysis.
+
+\pagebreak
+## References
+
+Kirchner, J. (n.d.). Data Analysis Toolkit #10: Simple linear regression. Berkeley Seismology Lab. Retrieved August 24, 2020, from http://seismo.berkeley.edu/~kirchner/eps_120/Toolkits/Toolkit_10.pdf
+
+Maher, H. D. (n.d.). linear regression and correlation coefficients. Cartography and Geographic Information Systems Laboratory. Retrieved August 24, 2020, from http://maps.unomaha.edu/Maher/GEOL2300/week3/week3.html
+
+Rolf, H. L. (2013). Finite Mathematics (8th ed.). Cengage Learning.
+
+Weisstein, E. W. (2020, August 24). Least Squares Fitting -- from Wolfram MathWorld. Wolfram MathWorld. https://mathworld.wolfram.com/LeastSquaresFitting.html
